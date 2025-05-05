@@ -201,7 +201,7 @@ router.get("/verify-email", async (req, res) => {
     const { valid, message } = await verifyToken(userId, token, 'email-verification');
     
     if (!valid) {
-      return res.status(400).render('email-verification', {
+      return res.status(400).render('verification-status', {
         title: "Verification Failed",
         success: false,
         message: message || "Invalid or expired token",
@@ -215,7 +215,7 @@ router.get("/verify-email", async (req, res) => {
       verifiedAt: new Date() 
     });
 
-    res.render('email-verification', {
+    res.render('verification-status', {
       title: "Verification Successful",
       success: true,
       message: "Your email has been verified successfully!",
@@ -224,7 +224,7 @@ router.get("/verify-email", async (req, res) => {
 
   } catch (error) {
     console.error("Verification error:", error);
-    res.status(500).render('email-verification', {
+    res.status(500).render('verification-status', {
       title: "Server Error",
       success: false,
       message: "An unexpected error occurred. Please try again later.",
