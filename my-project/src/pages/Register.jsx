@@ -63,6 +63,7 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData)
     e.preventDefault();
     setIsLoading(true);
     setError(null);
