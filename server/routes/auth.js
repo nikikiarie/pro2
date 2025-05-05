@@ -49,7 +49,7 @@ router.post("/register", async (req, res) => {
 
     // Generate and send verification email
     const verificationToken = await generateToken(savedUser._id, 'email-verification');
-    const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}&userId=${savedUser._id}`;
+    const verificationLink = `${process.env.BACKEND_URL}/verify-email?token=${verificationToken}&userId=${savedUser._id}`;
     
     const emailSent = await sendVerificationEmail(savedUser.email, verificationLink);
     
