@@ -193,15 +193,19 @@ router.post("/login", async (req, res) => {
 //   }
 // });
 
-router.post("/verify-email", async (req, res) => {
-  console.log("Verification request received:", req.body);
-  try {
-    const { token, userId } = req.body;
 
-    // Verify token
+router.get("/verify-email", async (req, res) => {
+  const { token, userId } = req.query;
+  console.log("Verification request received:", { token, userId });
+
+  try {
+    // Verify token (use your existing verifyToken function)
     const { valid, message } = await verifyToken(userId, token, 'email-verification');
+    
     if (!valid) {
-      return res.status(400).json({ success: false, message });
+      return res.redirect(
+        `${process.env.FRONTEND_URL}/verify-email?error=${encodeURIComponent(message)}`
+      );
     }
 
     // Update user
@@ -210,17 +214,16 @@ router.post("/verify-email", async (req, res) => {
       verifiedAt: new Date() 
     });
 
-    res.json({ 
-      success: true,
-      message: "Email verified successfully! You can now login."
-    });
+    // Redirect to frontend success page
+    res.redirect(
+      `${process.env.FRONTEND_URL}/verify-email?success=true&message=${encodeURIComponent("Email verified successfully!")}`
+    );
 
   } catch (error) {
     console.error("Verification error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Email verification failed. Please try again."
-    });
+    res.redirect(
+      `${process.env.FRONTEND_URL}/verify-email?error=${encodeURIComponent("Verification failed. Please try again.")}`
+    );
   }
 });
 
