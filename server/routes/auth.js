@@ -196,35 +196,43 @@ router.post("/login", async (req, res) => {
 
 router.get("/verify-email", async (req, res) => {
   const { token, userId } = req.query;
-  console.log("Verification request received:", { token, userId });
-
+  
   try {
-    // Verify token (use your existing verifyToken function)
     const { valid, message } = await verifyToken(userId, token, 'email-verification');
     
     if (!valid) {
-      return res.redirect(
-        `${process.env.FRONTEND_URL}/verify-email?error=${encodeURIComponent(message)}`
-      );
+      return res.status(400).render('email-verification', {
+        title: "Verification Failed",
+        success: false,
+        message: message || "Invalid or expired token",
+        showRetry: true,
+        appName: "Your App Name"
+      });
     }
 
-    // Update user
     await User.findByIdAndUpdate(userId, { 
       verified: true,
       verifiedAt: new Date() 
     });
 
-    // Redirect to frontend success page
-    res.redirect(
-      `${process.env.FRONTEND_URL}/verify-email?success=true&message=${encodeURIComponent("Email verified successfully!")}`
-    );
+    res.render('email-verification', {
+      title: "Verification Successful",
+      success: true,
+      message: "Your email has been verified successfully!",
+      appName: "Your App Name"
+    });
 
   } catch (error) {
     console.error("Verification error:", error);
-    res.redirect(
-      `${process.env.FRONTEND_URL}/verify-email?error=${encodeURIComponent("Verification failed. Please try again.")}`
-    );
+    res.status(500).render('email-verification', {
+      title: "Server Error",
+      success: false,
+      message: "An unexpected error occurred. Please try again later.",
+      showRetry: true,
+      appName: "Your App Name"
+    });
   }
+});
 });
 
 module.exports = router;
