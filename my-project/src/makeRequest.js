@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const baseUrl = "http://localhost:5000"
+const baseUrl = "https://pro2-xoka.onrender.com"
 
 const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY…Q2M30.fXPzC7qfNCgsAncR3QpoS0cV6wfczY_XjjbmIsa1klU`
 
