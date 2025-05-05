@@ -1,0 +1,9 @@
+# render.yaml
+static_sites:
+  - name: pro2-frontend
+    build_command: npm run build
+    publish: dist/
+    routes:
+      - type: rewrite
+        source: /verify-email
+        destination: /index.html
