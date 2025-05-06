@@ -23,7 +23,39 @@ const Cart = () => {
   const [paymentMethod, setPaymentMethod] = useState("mpesa"); // 'mpesa' or 'card'
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState("");
+  const [socket, setSocket] = useState(null);
 
+
+   useEffect(() => {
+      const newSocket = io("http://your-backend-url.com");
+      setSocket(newSocket);
+
+      return () => {
+        if (newSocket) newSocket.disconnect();
+      };
+    }, []);
+  
+
+  // Join user room and listen for payment success
+  useEffect(() => {
+    if (!socket || !user) return;
+
+    // Join user-specific room
+    socket.emit("join_room", `user_${user._id}`);
+
+    // Listen for payment success
+    socket.on("payment_success", (data) => {
+      toast.success(`Payment confirmed! Receipt: ${data.mpesaReceipt}`);
+      setShowPaymentModal(false);
+      navigate(`/order-success/${data.orderId}`);
+    });
+
+    return () => {
+      socket.off("payment_success");
+    };
+  }, [socket, user]);
+
+  
   const handleCheckoutClick = () => {
     if (!user) {
       navigate("/login", { state: location });
@@ -42,6 +74,7 @@ const Cart = () => {
       setPaymentError('');
       
       setIsProcessing(true);
+      
       try {
         const orderRes = await publicRequest.post("/api/orders", {
           userId: user._id,
