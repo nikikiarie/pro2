@@ -47,7 +47,7 @@ router.post('/callback', async (req, res) => {
     } else {
         console.log("Found order:", order);
         // Do something with the order...
-    }*/
+    }
    const callbackMetadata = callbackData?.Body?.stkCallback?.CallbackMetadata?.Item || [];
         const paymentData = {
             amount: callbackMetadata.find(item => item.Name === "Amount")?.Value,
