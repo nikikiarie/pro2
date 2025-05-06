@@ -18,17 +18,18 @@ router.post('/initiatepayment', async (req, res) => {
 
 router.post('/callback', (req, res) => {
     const callbackData = req.body;
-    console.log("callbackData", callbackData);
-    // console.log(callbackData.Body);
-    // Process the callback data
-    // if (callbackData.ResultCode === 0) {
-    //   // Payment was successful
-    //   // Update your database, send confirmation email, etc.
-    //   console.log('Payment successful:', callbackData);
-    // } else {
-    //   // Payment failed
-    //   console.log('Payment failed:', callbackData);
-    // }
+    
+    // 1. First show me EVERYTHING as-is
+    console.log("COMPLETE CALLBACK DATA:\n", JSON.stringify(callbackData, null, 2));
+    
+    // 2. Then show just the metadata structure
+    if (callbackData?.Body?.stkCallback?.CallbackMetadata) {
+        const meta = callbackData.Body.stkCallback.CallbackMetadata;
+        console.log("\nMETADATA STRUCTURE:\n", JSON.stringify(meta, null, 2));
+    } else {
+        console.log("\nNo metadata found");
+    }
+    
     
     // res.status(200).end();
 
