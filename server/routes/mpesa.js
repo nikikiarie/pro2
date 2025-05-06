@@ -81,7 +81,7 @@ router.post('/callback', async (req, res) => {
     //   message: 'Callback Received Successfully',
     //   success: true
     //   });
-    res.json({ status: 'success' });
+    res.json({ status: 'success',  redirectUrl: "https://pro2-frontend.onrender.com" });
   });
 
 
