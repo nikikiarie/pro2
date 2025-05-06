@@ -27,7 +27,7 @@ router.post('/callback', async (req, res) => {
     const callbackData = req.body;
 
     
-   // 1. First show me EVERYTHING as-is
+  /* // 1. First show me EVERYTHING as-is
     console.log("COMPLETE CALLBACK DATA:\n", JSON.stringify(callbackData, null, 2));
     
     // 2. Then show just the metadata structure
@@ -37,8 +37,8 @@ router.post('/callback', async (req, res) => {
     } else {
         console.log("\nNo metadata found");
     }
-
-  /*
+*/
+  
   const checkoutId = callbackData?.Body?.stkCallback?.CheckoutRequestID
   try {
     const order = await Order.findOne({ checkoutRequestId: checkoutId });
@@ -68,7 +68,7 @@ router.post('/callback', async (req, res) => {
         console.log("Updated order:", order);
   } catch (err) {
     console.error("Error finding order:", err);
-} */
+}
     
     // res.status(200).end();
 
