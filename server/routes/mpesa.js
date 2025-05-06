@@ -27,7 +27,7 @@ router.post('/callback', async (req, res) => {
     const callbackData = req.body;
 
     
-    // 1. First show me EVERYTHING as-is
+  /*  // 1. First show me EVERYTHING as-is
     console.log("COMPLETE CALLBACK DATA:\n", JSON.stringify(callbackData, null, 2));
     
     // 2. Then show just the metadata structure
@@ -40,13 +40,30 @@ router.post('/callback', async (req, res) => {
   const checkoutId = callbackData?.Body?.stkCallback?.CheckoutRequestID
   try {
     const order = await Order.findOne({ checkoutRequestId: checkoutId });
+    order.phoneNumber = callbackData?.Body?.stkCallback?.
     
     if (!order) {
         console.log("Order not found for checkoutId:", checkoutId);
     } else {
         console.log("Found order:", order);
         // Do something with the order...
-    }
+    }*/
+   const callbackMetadata = callbackData?.Body?.stkCallback?.CallbackMetadata?.Item || [];
+        const paymentData = {
+            amount: callbackMetadata.find(item => item.Name === "Amount")?.Value,
+            mpesaReceipt: callbackMetadata.find(item => item.Name === "MpesaReceiptNumber")?.Value,
+            phoneNumber: callbackMetadata.find(item => item.Name === "PhoneNumber")?.Value?.toString(), // Convert to string
+            transactionDate: callbackMetadata.find(item => item.Name === "TransactionDate")?.Value
+        };
+
+        // 3. Update the order
+        order.status = 'paid'; // Mark as paid
+        order.mpesaReceipt = paymentData.mpesaReceipt; // Save receipt number
+        order.phoneNumber = paymentData.phoneNumber; // Save phone number
+
+        await order.save(); // Save changes to DB
+
+        console.log("Updated order:", order);
 } catch (err) {
     console.error("Error finding order:", err);
 }
