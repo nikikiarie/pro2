@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaPlus, FaMinus, FaTimes, FaMobileAlt } from "react-icons/fa";
@@ -53,8 +54,8 @@ const Cart = () => {
           { headers: { token: `Bearer ${token}` } }
         );
         
-        if (res.data.success) {
-          alert('Payment initiated. Please check your phone to complete the payment.');
+        if (res.data.ResponseCode === "0") {
+          toast.success('Payment initiated!');
           setShowPaymentModal(false);
         } else {
           setPaymentError(res.data.message || 'Failed to initiate payment');
