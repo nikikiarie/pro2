@@ -66,6 +66,15 @@ router.post('/callback', async (req, res) => {
 
         await order.save(); // Save changes to DB
 
+        // Notify frontend via Socket.IO
+        const io = req.app.get('socketio');
+        io.to(`user_${order.userId}`).emit('payment_success', {
+          orderId: order._id,
+          status: 'paid',
+          mpesaReceipt: paymentData.mpesaReceipt
+        });
+    
+    
         console.log("Updated order:", order);
   } catch (err) {
     console.error("Error finding order:", err);
@@ -81,7 +90,7 @@ router.post('/callback', async (req, res) => {
     //   message: 'Callback Received Successfully',
     //   success: true
     //   });
-    res.json({ status: 'success',  redirectUrl: "https://pro2-frontend.onrender.com" });
+    res.json({ status: 'success' });
   });
 
 
