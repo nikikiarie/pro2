@@ -43,13 +43,18 @@ const Cart = () => {
       
       setIsProcessing(true);
       try {
+        const orderRes = await publicRequest.post('/api/orders', {
+          userId: user._id,
+          items: cart.products,
+          totalAmount: cart.amount
+        });
+        
         const res = await publicRequest.post(
           "/api/initiatepayment",
           {
             phone: phoneNumber,
             amount: cart.amount,
-            reference: `ORDER_${Date.now()}`,
-            userId: user._id
+            orderId: orderRes.data._id // Pass order ID for reference
           },
           { headers: { token: `Bearer ${token}` } }
         );
