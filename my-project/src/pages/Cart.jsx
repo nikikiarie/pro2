@@ -43,7 +43,7 @@ const Cart = () => {
       setIsProcessing(true);
       try {
         const res = await publicRequest.post(
-          "/api/initiate-payment",
+          "/api/initiatepayment",
           {
             phone: phoneNumber,
             amount: cart.amount,
