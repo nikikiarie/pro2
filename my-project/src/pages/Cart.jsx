@@ -43,7 +43,7 @@ const Cart = () => {
       setIsProcessing(true);
       try {
         const res = await publicRequest.post(
-          "/api/mpesa/initiate-payment",
+          "/api/initiate-payment",
           {
             phone: phoneNumber,
             amount: cart.amount,
