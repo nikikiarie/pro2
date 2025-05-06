@@ -19,6 +19,9 @@ const getAuthToken = async () => {
 
 const initiateSTKPush = async (phone, amount) => {
   try {
+    const formattedPhone = phone.startsWith('254') ? phone : 
+                         phone.startsWith('0') ? `254${phone.substring(1)}` : 
+                         `254${phone}`;
     const token = await getAuthToken();
     console.log('Token:', token);
     console.log(phone)
