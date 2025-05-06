@@ -5,6 +5,7 @@ const { initiateSTKPush } = require("../utils/mpesa");
 router.post('/initiatepayment', async (req, res) => {
   try {
     const { phone, amount} = req.body;
+    console.log("Phone", phone)
     const response = await initiateSTKPush(phone, amount);
     console.log('STK Push Response:', response);
     res.json(response);
