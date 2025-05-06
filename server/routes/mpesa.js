@@ -1,28 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const Payment = require('../models/Payment')
+const Order = require('../models/Order')
 const { initiateSTKPush } = require("../utils/mpesa");
 
 router.post('/initiatepayment', async (req, res) => {
   try {
-    const { phone, amount} = req.body;
+    const { phone, amount, orderId} = req.body;
     console.log("Phone", phone)
 
-    const paymentRecord = new Payment({
-      orderId,
-      phone,
-      amount,
-      status: 'initiated',
-      reference: `MPESA_${Date.now()}`
-    });
-    await paymentRecord.save();
-    
+    const order = await Order.findById(orderId)
     const response = await initiateSTKPush(phone, amount);
     console.log('STK Push Response:', response);
 
-    paymentRecord.mpesaRequestId = response.MerchantRequestID;
-    paymentRecord.checkoutRequestId = response.CheckoutRequestID;
-    await paymentRecord.save();
+    order.checkoutRequestId = response.CheckoutRequestID;
+    await order.save();
     
     res.json(response);
   } catch (error) {
@@ -34,6 +25,7 @@ router.post('/initiatepayment', async (req, res) => {
 
 router.post('/callback', (req, res) => {
     const callbackData = req.body;
+
     
     // 1. First show me EVERYTHING as-is
     console.log("COMPLETE CALLBACK DATA:\n", JSON.stringify(callbackData, null, 2));
