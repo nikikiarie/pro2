@@ -58,15 +58,15 @@ function App() {
         <Route path="/verify-email" element={<Verify />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
-        <Route element={user ? <Layout /> : <Navigate to="/unauthorized" />}>
+        {/* <Route element={user ? <Layout /> : <Navigate to="/unauthorized" />}>
           <Route path="/admin/home" element={<Home />} />
-          {/* <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/user/:id" element={<User />} />
           <Route path="/admin/newUser" element={<NewUser />} />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/admin/product/:id" element={<AdminProduct />} />
-          <Route path="/admin/newProduct" element={<NewProduct />} /> */}
-        </Route>
+          <Route path="/admin/newProduct" element={<NewProduct />} />
+        </Route> */}
 
         {/* <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/user/:id" element={<AdminUser />} />
