@@ -19,13 +19,8 @@ const getAuthToken = async () => {
 
 const initiateSTKPush = async (phone, amount) => {
   try {
-    const formattedPhone = phone.startsWith('254') ? phone : 
-                         phone.startsWith('0') ? `254${phone.substring(1)}` : 
-                         `254${phone}`;
     const token = await getAuthToken();
-    console.log('Token:', token);
-    console.log(phone)
-    console.log(amount)
+    
     const timestamp = new Date()
       .toISOString()
       .replace(/[^0-9]/g, '')
@@ -44,7 +39,7 @@ const initiateSTKPush = async (phone, amount) => {
         Amount: amount,
         PartyA: `254${phone}`,
         PartyB: process.env.MPESA_BUSINESS_SHORTCODE,
-        PhoneNumber: phone,
+        PhoneNumber: `254${phone}`,
         CallBackURL: process.env.MPESA_CALLBACK_URL,
         AccountReference: "Test",
         // AccountReference: process.env.MPESA_REFERENCE,
