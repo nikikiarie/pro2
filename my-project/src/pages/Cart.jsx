@@ -48,6 +48,7 @@ const Cart = () => {
           items: cart.products,
           totalAmount: cart.amount
         });
+        console.log("orderRes", orderRes)
         
         const res = await publicRequest.post(
           "/api/initiatepayment",
