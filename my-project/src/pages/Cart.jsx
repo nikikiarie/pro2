@@ -45,7 +45,12 @@ const Cart = () => {
       try {
         const orderRes = await publicRequest.post("/api/orders", {
           userId: user._id,
-          items: cart.products,
+          items: cart.products.map(item => ({
+            productId: item._id.toString(), // Use _id as productId
+            title: item.title,
+            quantity: item.quantity,
+            price: item.price
+            })),
           totalAmount: cart.amount
         });
         console.log("orderRes", orderRes)
