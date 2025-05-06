@@ -4,8 +4,6 @@ const path = require("path")
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'templates'));
 
 dotenv.config()
 
@@ -22,6 +20,9 @@ const mpesaRoutes = require("./routes/mpesa");
 
 
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'templates'));
 
 app.use((req, res, next) => {
   console.log(`Incoming ${req.method} request to ${req.path}`);
