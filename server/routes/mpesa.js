@@ -37,7 +37,19 @@ router.post('/callback', (req, res) => {
     } else {
         console.log("\nNo metadata found");
     }
+  const checkoutId = callbackData?.Body?.stkCallback?.CheckoutRequestID
+  try {
+    const order = await Order.findOne({ checkoutRequestId: checkoutId });
     
+    if (!order) {
+        console.log("Order not found for checkoutId:", checkoutId);
+    } else {
+        console.log("Found order:", order);
+        // Do something with the order...
+    }
+} catch (err) {
+    console.error("Error finding order:", err);
+}
     
     // res.status(200).end();
 
