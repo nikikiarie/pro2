@@ -43,7 +43,7 @@ const Cart = () => {
       
       setIsProcessing(true);
       try {
-        const orderRes = await publicRequest.post('/api/orders', {
+        const orderRes = await publicRequest.post('/api/orders/', {
           userId: user._id,
           items: cart.products,
           totalAmount: cart.amount
