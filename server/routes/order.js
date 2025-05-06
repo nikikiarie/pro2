@@ -15,6 +15,7 @@ router.post('/', async (req, res) => {
       items,
       totalAmount
     });
+    console.log(order)
 
     res.status(201).json(order);
   } catch (error) {
