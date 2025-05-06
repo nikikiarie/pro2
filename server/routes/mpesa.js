@@ -36,7 +36,7 @@ router.post('/callback', async (req, res) => {
         console.log("\nMETADATA STRUCTURE:\n", JSON.stringify(meta, null, 2));
     } else {
         console.log("\nNo metadata found");
-    }
+    }*/
   const checkoutId = callbackData?.Body?.stkCallback?.CheckoutRequestID
   try {
     const order = await Order.findOne({ checkoutRequestId: checkoutId });
@@ -64,9 +64,9 @@ router.post('/callback', async (req, res) => {
         await order.save(); // Save changes to DB
 
         console.log("Updated order:", order);
-/* catch (err) {
+  } catch (err) {
     console.error("Error finding order:", err);
-} */
+} 
     
     // res.status(200).end();
 
