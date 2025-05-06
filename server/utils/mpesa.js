@@ -21,6 +21,8 @@ const initiateSTKPush = async (phone, amount) => {
   try {
     const token = await getAuthToken();
     console.log('Token:', token);
+    console.log(phone)
+    console.log(amount)
     const timestamp = new Date()
       .toISOString()
       .replace(/[^0-9]/g, '')
