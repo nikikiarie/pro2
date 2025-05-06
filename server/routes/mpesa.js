@@ -40,7 +40,7 @@ router.post('/callback', async (req, res) => {
   const checkoutId = callbackData?.Body?.stkCallback?.CheckoutRequestID
   try {
     const order = await Order.findOne({ checkoutRequestId: checkoutId });
-    order.phoneNumber = callbackData?.Body?.stkCallback?.
+    
     
     if (!order) {
         console.log("Order not found for checkoutId:", checkoutId);
