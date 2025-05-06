@@ -59,6 +59,7 @@ router.post('/callback', async (req, res) => {
         };
 
         // 3. Update the order
+    console.log("paymentData",paymentData)
         order.status = 'paid'; // Mark as paid
         order.mpesaReceipt = paymentData.mpesaReceipt; // Save receipt number
         order.phoneNumber = paymentData.phoneNumber; // Save phone number
