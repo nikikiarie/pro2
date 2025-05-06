@@ -27,13 +27,26 @@ import Unauthorized from "./pages/Unauthorized";
 // import AdminProduct from "./pages/admin/product/AdminProduct";
 // import NewProduct from "./pages/admin/newProduct/NewProduct";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
   const user = useSelector((state) => state.user?.user?.isAdmin);
   console.log(user);
   return (
     <Router>
-      <ToastContainer />
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
