@@ -1,13 +1,29 @@
 const express = require("express");
 const router = express.Router();
+const Payment = require('../models/Payment')
 const { initiateSTKPush } = require("../utils/mpesa");
 
 router.post('/initiatepayment', async (req, res) => {
   try {
     const { phone, amount} = req.body;
     console.log("Phone", phone)
+
+    const paymentRecord = new Payment({
+      orderId,
+      phone,
+      amount,
+      status: 'initiated',
+      reference: `MPESA_${Date.now()}`
+    });
+    await paymentRecord.save();
+    
     const response = await initiateSTKPush(phone, amount);
     console.log('STK Push Response:', response);
+
+    paymentRecord.mpesaRequestId = response.MerchantRequestID;
+    paymentRecord.checkoutRequestId = response.CheckoutRequestID;
+    await paymentRecord.save();
+    
     res.json(response);
   } catch (error) {
     res.status(500).json({ error: error.message });
