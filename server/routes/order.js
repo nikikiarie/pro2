@@ -5,45 +5,22 @@ const router = require('express').Router()
 
 
 
-import express from 'express';
-import Order from '../models/Order.js';
 
-
-
-
-// Create new order (before payment)
 router.post('/', async (req, res) => {
   try {
-    const { items, totalAmount , userId} = req.body;
+    const { userId, items, totalAmount } = req.body;
     
-    // Create pending order
-    const order = new Order({
-      user: userId,
+    const order = await Order.create({
+      userId,
       items,
-      totalAmount,
-      status: 'pending'
+      totalAmount
     });
 
-    const createdOrder = await order.save();
-
-    // Clear user's cart
-    // await Cart.findOneAndUpdate(
-      // { user: req.user._id },
-      //{ $set: { items: [] } }
-    // );
-
-    res.status(201).json(createdOrder);
-
+    res.status(201).json(order);
   } catch (error) {
-    res.status(500).json({ 
-      message: 'Order creation failed',
-      error: error.message 
-    });
+    res.status(500).json({ error: "Order creation failed" });
   }
 });
-
-
-
 
 
 
