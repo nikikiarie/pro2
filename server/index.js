@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path")
+const http = require('http');
+const socketIo = require('socket.io');
 const mongoose = require("mongoose");
 const cors = require("cors");
 
@@ -20,6 +22,10 @@ const mpesaRoutes = require("./routes/mpesa");
 
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+app.set('socketio', io);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'templates'));
@@ -59,6 +65,19 @@ app.use("/api/checkout", stripeRoutes);
 app.use("/api", mpesaRoutes);
 
 
+io.on('connection', (socket) => {
+  console.log('New client connected:', socket.id);
+
+  // Join a user-specific room
+  socket.on('join_room', (userId) => {
+    socket.join(`user_${userId}`);
+    console.log(`User ${userId} joined room`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
 
 // app.use(express.static(path.join(__dirname, "./client/build")));
 // app.get("*", function (_, res) {
