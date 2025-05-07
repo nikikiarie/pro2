@@ -24,7 +24,7 @@ router.post('/initiatepayment', async (req, res) => {
 });
 
 
-router.post('/callback', (req, res) => {
+router.post('/callbackk', (req, res) => {
     const callbackData = req.body;
 
     
