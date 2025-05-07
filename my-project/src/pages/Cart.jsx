@@ -24,38 +24,38 @@ const Cart = () => {
   const [paymentMethod, setPaymentMethod] = useState("mpesa");
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState("");
-  const [isPolling, setIsPolling] = useState(false);
-  const [currentOrderId, setCurrentOrderId] = useState(null);
+  // const [isPolling, setIsPolling] = useState(false);
+  // const [currentOrderId, setCurrentOrderId] = useState(null);
 
-  // Polling for payment status
-  useEffect(() => {
-    let intervalId;
+  // // Polling for payment status
+  // useEffect(() => {
+  //   let intervalId;
     
-    if (isPolling && currentOrderId) {
-      intervalId = setInterval(() => {
-        checkPaymentStatus(currentOrderId);
-      }, 5000); // Check every 5 seconds
-    }
+  //   if (isPolling && currentOrderId) {
+  //     intervalId = setInterval(() => {
+  //       checkPaymentStatus(currentOrderId);
+  //     }, 5000); // Check every 5 seconds
+  //   }
 
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [isPolling, currentOrderId]);
+  //   return () => {
+  //     if (intervalId) clearInterval(intervalId);
+  //   };
+  // }, [isPolling, currentOrderId]);
 
-  const checkPaymentStatus = async (orderId) => {
-    try {
-      const response = await publicRequest.get(`/api/orders/${orderId}/status`);
+  // const checkPaymentStatus = async (orderId) => {
+  //   try {
+  //     const response = await publicRequest.get(`/api/orders/${orderId}/status`);
       
-      if (response.data.status === 'paid') {
-        toast.success(`Payment confirmed! Receipt: ${response.data.mpesaReceipt}`);
-        setIsPolling(false);
-        setShowPaymentModal(false);
-        // navigate(`/order-success/${orderId}`);
-      }
-    } catch (err) {
-      console.error('Status check failed:', err);
-    }
-  };
+  //     if (response.data.status === 'paid') {
+  //       toast.success(`Payment confirmed! Receipt: ${response.data.mpesaReceipt}`);
+  //       setIsPolling(false);
+  //       setShowPaymentModal(false);
+  //       // navigate(`/order-success/${orderId}`);
+  //     }
+  //   } catch (err) {
+  //     console.error('Status check failed:', err);
+  //   }
+  // };
 
   const handleCheckoutClick = () => {
     if (!user) {
@@ -102,8 +102,8 @@ const Cart = () => {
         
         if (res.data.ResponseCode === "0") {
           toast.success('Payment initiated! Please check your phone...');
-          setCurrentOrderId(orderRes.data._id);
-          setIsPolling(true);
+          // setCurrentOrderId(orderRes.data._id);
+          // setIsPolling(true);
           setShowPaymentModal(false);
         } else {
           setPaymentError(res.data.message || 'Failed to initiate payment');
