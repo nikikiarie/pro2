@@ -48,8 +48,10 @@ const Cart = () => {
     // Join user-specific room
     socket.emit("join_room", `user_${user._id}`);
 
+
     // Listen for payment success
     socket.on("payment_success", (data) => {
+      console.log("Payment success data:", data);
       toast.success(`Payment confirmed! Receipt: ${data.mpesaReceipt}`);
       setShowPaymentModal(false);
       navigate(`/order-success/${data.orderId}`);
