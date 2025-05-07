@@ -114,21 +114,21 @@ const Cart = () => {
         setPaymentError(err.response?.data?.message || 'Payment failed. Please try again.');
       } finally {
         setIsProcessing(false);
-        setTimeout(() => {
-          toast.success('Payment confirmed! Your order is being processed', {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
+        // setTimeout(() => {
+        //   toast.success('Payment confirmed! Your order is being processed', {
+        //     position: "top-center",
+        //     autoClose: 5000,
+        //     hideProgressBar: false,
+        //     closeOnClick: true,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //   });
           
-          // Optional: Navigate to success page after toast
-          setTimeout(() => {
-            navigate('/');
-          }, 2000);
-        }, 15000);
+        //   // Optional: Navigate to success page after toast
+        //   setTimeout(() => {
+        //     navigate('/');
+        //   }, 2000);
+        // }, 15000);
       }
     } else {
       // Handle card payment
