@@ -40,37 +40,37 @@ router.post('/callback', async (req, res) => {
     }
 
   
-  const checkoutId = callbackData?.Body?.stkCallback?.CheckoutRequestID
-  try {
-    const order = await Order.findOne({ checkoutRequestId: checkoutId });
+//   const checkoutId = callbackData?.Body?.stkCallback?.CheckoutRequestID
+//   try {
+//     const order = await Order.findOne({ checkoutRequestId: checkoutId });
     
     
-    if (!order) {
-        console.log("Order not found for checkoutId:", checkoutId);
-    } else {
-        console.log("Found order:", order);
-        // Do something with the order...
-    }
-   const callbackMetadata = callbackData?.Body?.stkCallback?.CallbackMetadata?.Item || [];
-        const paymentData = {
-            amount: callbackMetadata.find(item => item.Name === "Amount")?.Value,
-            mpesaReceipt: callbackMetadata.find(item => item.Name === "MpesaReceiptNumber")?.Value,
-            phoneNumber: callbackMetadata.find(item => item.Name === "PhoneNumber")?.Value?.toString(), // Convert to string
-            transactionDate: callbackMetadata.find(item => item.Name === "TransactionDate")?.Value
-        };
+//     if (!order) {
+//         console.log("Order not found for checkoutId:", checkoutId);
+//     } else {
+//         console.log("Found order:", order);
+//         // Do something with the order...
+//     }
+//    const callbackMetadata = callbackData?.Body?.stkCallback?.CallbackMetadata?.Item || [];
+//         const paymentData = {
+//             amount: callbackMetadata.find(item => item.Name === "Amount")?.Value,
+//             mpesaReceipt: callbackMetadata.find(item => item.Name === "MpesaReceiptNumber")?.Value,
+//             phoneNumber: callbackMetadata.find(item => item.Name === "PhoneNumber")?.Value?.toString(), // Convert to string
+//             transactionDate: callbackMetadata.find(item => item.Name === "TransactionDate")?.Value
+//         };
 
-        // 3. Update the order
-    console.log("paymentData",paymentData)
-        order.status = 'paid'; // Mark as paid
-        order.mpesaReceipt = paymentData.mpesaReceipt; // Save receipt number
-        order.phoneNumber = paymentData.phoneNumber; // Save phone number
+//         // 3. Update the order
+//     console.log("paymentData",paymentData)
+//         order.status = 'paid'; // Mark as paid
+//         order.mpesaReceipt = paymentData.mpesaReceipt; // Save receipt number
+//         order.phoneNumber = paymentData.phoneNumber; // Save phone number
 
-        await order.save(); // Save changes to DB
+//         await order.save(); // Save changes to DB
 
-        console.log("Order updated successfully:", order);
-  } catch (err) {
-    console.error("Error finding order:", err);
-}
+//         console.log("Order updated successfully:", order);
+//   } catch (err) {
+//     console.error("Error finding order:", err);
+// }
     
     // res.status(200).end();
 
