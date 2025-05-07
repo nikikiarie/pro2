@@ -73,6 +73,21 @@ try {
    
 })
 
-
+// Get payment status
+// Get payment status
+router.get('/:id/status', async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    res.json({ 
+      status: order.status,
+      receipt: order.mpesaReceipt
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 module.exports = router

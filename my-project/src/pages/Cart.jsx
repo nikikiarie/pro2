@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaPlus, FaMinus, FaTimes, FaMobileAlt } from "react-icons/fa";
-import { io } from "socket.io-client"; 
 
 import { decreaseProductAmount, increaseProductAmount } from "../redux/cartSlice";
 import Announcement from "../components/Announcement";
@@ -22,47 +21,42 @@ const Cart = () => {
   // State for payment modal
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("mpesa"); // 'mpesa' or 'card'
+  const [paymentMethod, setPaymentMethod] = useState("mpesa");
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState("");
-  const [socket, setSocket] = useState(null);
+  const [isPolling, setIsPolling] = useState(false);
+  const [currentOrderId, setCurrentOrderId] = useState(null);
 
-
-   useEffect(() => {
-      const newSocket = io("https://pro2-xoka.onrender.com",{ 
-        secure: true,  // Enforces HTTPS
-        transports: ['websocket']  // Bypass mixed-content restrictions
-      });
-      setSocket(newSocket);
-
-      return () => {
-        if (newSocket) newSocket.disconnect();
-      };
-    }, []);
-  
-
-  // Join user room and listen for payment success
+  // Polling for payment status
   useEffect(() => {
-    if (!socket || !user) return;
-
-    // Join user-specific room
-    socket.emit("join_room", `user_${user._id}`);
-
-
-    // Listen for payment success
-    socket.on("payment_success", (data) => {
-      console.log("Payment success data:", data);
-      toast.success(`Payment confirmed! Receipt: ${data.mpesaReceipt}`);
-      setShowPaymentModal(false);
-      navigate(`/order-success/${data.orderId}`);
-    });
+    let intervalId;
+    
+    if (isPolling && currentOrderId) {
+      intervalId = setInterval(() => {
+        checkPaymentStatus(currentOrderId);
+      }, 5000); // Check every 5 seconds
+    }
 
     return () => {
-      socket.off("payment_success");
+      if (intervalId) clearInterval(intervalId);
     };
-  }, [socket, user]);
+  }, [isPolling, currentOrderId]);
 
-  
+  const checkPaymentStatus = async (orderId) => {
+    try {
+      const response = await publicRequest.get(`/api/orders/${orderId}/status`);
+      
+      if (response.data.status === 'paid') {
+        toast.success(`Payment confirmed! Receipt: ${response.data.mpesaReceipt}`);
+        setIsPolling(false);
+        setShowPaymentModal(false);
+        // navigate(`/order-success/${orderId}`);
+      }
+    } catch (err) {
+      console.error('Status check failed:', err);
+    }
+  };
+
   const handleCheckoutClick = () => {
     if (!user) {
       navigate("/login", { state: location });
@@ -83,30 +77,33 @@ const Cart = () => {
       setIsProcessing(true);
       
       try {
+        // 1. Create order
         const orderRes = await publicRequest.post("/api/orders", {
           userId: user._id,
           items: cart.products.map(item => ({
-            productId: item._id.toString(), // Use _id as productId
+            productId: item._id.toString(),
             title: item.title,
             quantity: item.quantity,
             price: item.price
-            })),
+          })),
           totalAmount: cart.amount
         });
-        console.log("orderRes", orderRes)
         
+        // 2. Initiate payment
         const res = await publicRequest.post(
           "/api/initiatepayment",
           {
             phone: phoneNumber,
             amount: cart.amount,
-            orderId: orderRes.data._id // Pass order ID for reference
+            orderId: orderRes.data._id
           },
           { headers: { token: `Bearer ${token}` } }
         );
         
         if (res.data.ResponseCode === "0") {
-          toast.success('Payment initiated!');
+          toast.success('Payment initiated! Please check your phone...');
+          setCurrentOrderId(orderRes.data._id);
+          setIsPolling(true);
           setShowPaymentModal(false);
         } else {
           setPaymentError(res.data.message || 'Failed to initiate payment');

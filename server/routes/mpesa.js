@@ -67,17 +67,7 @@ router.post('/callback', async (req, res) => {
 
         await order.save(); // Save changes to DB
 
-        // Notify frontend via Socket.IO
-        const io = req.app.get('socketio');
-        io.to(`user_${order.userId}`).emit('payment_success', {
-          orderId: order._id,
-          status: 'paid',
-          mpesaReceipt: paymentData.mpesaReceipt
-        });
-    
-        console.log("=== EMIT CONFIRMATION ==="); 
-        console.log("Event emitted successfully");
-        console.log("Updated order:", order.userId.toString());
+        
   } catch (err) {
     console.error("Error finding order:", err);
 }
