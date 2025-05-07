@@ -76,7 +76,7 @@ router.post('/callback', async (req, res) => {
     
         console.log("=== EMIT CONFIRMATION ==="); 
         console.log("Event emitted successfully");
-        console.log("Updated order:", order._id);
+        console.log("Updated order:", order._id.toString());
   } catch (err) {
     console.error("Error finding order:", err);
 }
