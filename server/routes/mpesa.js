@@ -11,6 +11,7 @@ router.post('/initiatepayment', async (req, res) => {
     const order = await Order.findById(orderId)
     const response = await initiateSTKPush(phone, amount);
     console.log('STK Push Response:', response);
+    console.log("Order ID", order.userId)
 
     order.checkoutRequestId = response.CheckoutRequestID;
     await order.save();
@@ -76,7 +77,7 @@ router.post('/callback', async (req, res) => {
     
         console.log("=== EMIT CONFIRMATION ==="); 
         console.log("Event emitted successfully");
-        console.log("Updated order:", order._id.toString());
+        console.log("Updated order:", order.userId.toString());
   } catch (err) {
     console.error("Error finding order:", err);
 }
