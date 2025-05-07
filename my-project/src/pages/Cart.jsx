@@ -126,7 +126,7 @@ const Cart = () => {
           
           // Optional: Navigate to success page after toast
           setTimeout(() => {
-            navigate('/order-success');
+            navigate('/');
           }, 2000);
         }, 15000);
       }
