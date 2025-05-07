@@ -190,6 +190,18 @@ app.get("/", (req, res) => {
   res.send("Server is working");
 });
 
+app.post("/test-payment-success", async (req, res) => {
+  const { userId, orderId } = req.body;
+  const io = req.app.get("socketio");
+  console.log("Test emitting to:", `user_${userId}`);
+  io.to(`user_${userId}`).emit("payment_success", {
+    orderId,
+    status: "paid",
+    mpesaReceipt: "TEST123",
+  });
+  res.json({ status: "success", message: "Test event emitted" });
+});
+
 // Database connection and server start
 const PORT = process.env.PORT || 4000;
 mongoose.set("strictQuery", false);
