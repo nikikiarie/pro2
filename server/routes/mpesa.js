@@ -74,7 +74,8 @@ router.post('/callback', async (req, res) => {
           mpesaReceipt: paymentData.mpesaReceipt
         });
     
-    
+        console.log("=== EMIT CONFIRMATION ==="); 
+        console.log("Event emitted successfully");
         console.log("Updated order:", order);
   } catch (err) {
     console.error("Error finding order:", err);
