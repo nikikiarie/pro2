@@ -117,7 +117,7 @@ const Cart = () => {
         setTimeout(() => {
           toast.success('Payment confirmed! Your order is being processed', {
             position: "top-center",
-            autoClose: 15000,
+            autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -126,9 +126,9 @@ const Cart = () => {
           
           // Optional: Navigate to success page after toast
           setTimeout(() => {
-            navigate('/');
+            navigate('/order-success');
           }, 2000);
-        }, 5000);
+        }, 15000);
       }
     } else {
       // Handle card payment
