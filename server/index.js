@@ -143,17 +143,13 @@ app.set('socketio', io);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'templates'));
 
-// Middleware
-// app.use(cors({
-//   origin: 'https://pro2-frontend.onrender.com',
-//   methods: ['GET', 'POST'],
-  
-// }));
+
 app.use(cors({
-  origin: ['https://pro2-frontend.onrender.com', 'https://sandbox.safaricom.co.ke'],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: 'https://pro2-frontend.onrender.com',
+  methods: ['GET', 'POST'],
+  
 }));
+
 
 app.use('/api/mpesa/callback', bodyParser.raw({ type: 'application/json' }));
 app.use(express.json());
