@@ -82,7 +82,7 @@ router.post('/callback', (req, res) => {
     //   message: 'Callback Received Successfully',
     //   success: true
     //   });
-    res.json({ status: 'success' });
+    res.json("success" );
   });
 
 
