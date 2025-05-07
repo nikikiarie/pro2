@@ -29,7 +29,10 @@ const Cart = () => {
 
 
    useEffect(() => {
-      const newSocket = io("https://pro2-xoka.onrender.com");
+      const newSocket = io("https://pro2-xoka.onrender.com",{ 
+        secure: true,  // Enforces HTTPS
+        transports: ['websocket']  // Bypass mixed-content restrictions
+      });
       setSocket(newSocket);
 
       return () => {
