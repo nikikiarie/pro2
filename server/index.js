@@ -132,7 +132,7 @@ const io = new Server(server, {
     origin: ["https://pro2-frontend.onrender.com", "http://localhost:3000"],
     methods: ["GET", "POST"]
   },
-  transports: ['websocket', 'polling'],
+  transports: ['websocket'],
   allowUpgrades: true,
   pingTimeout: 60000,
   pingInterval: 25000
@@ -145,7 +145,8 @@ app.set('views', path.join(__dirname, 'templates'));
 // Middleware
 app.use(cors({
   origin: 'https://pro2-frontend.onrender.com',
-  methods: ['GET', 'POST']
+  methods: ['GET', 'POST'],
+  
 }));
 
 app.use(express.json());
@@ -172,6 +173,7 @@ app.use("/api", mpesaRoutes);
 // Socket.io Events
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
+  
 
   socket.on('join_room', (userId) => {
     socket.join(`user_${userId}`);
