@@ -100,7 +100,7 @@ const Cart = () => {
           },
           { headers: { token: `Bearer ${token}` } }
         );
-        
+        console.log("Payment response from initate payment:", res.data);
         if (res.data.ResponseCode === "0") {
           toast.success('Payment initiated! Please check your phone...');
           // setCurrentOrderId(orderRes.data._id);
