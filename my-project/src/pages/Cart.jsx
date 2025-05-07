@@ -24,6 +24,7 @@ const Cart = () => {
   const [paymentMethod, setPaymentMethod] = useState("mpesa");
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState("");
+  const [success, setSuccess] = useState(false);
   // const [isPolling, setIsPolling] = useState(false);
   // const [currentOrderId, setCurrentOrderId] = useState(null);
 
@@ -113,6 +114,21 @@ const Cart = () => {
         setPaymentError(err.response?.data?.message || 'Payment failed. Please try again.');
       } finally {
         setIsProcessing(false);
+        setTimeout(() => {
+          toast.success('Payment confirmed! Your order is being processed', {
+            position: "top-center",
+            autoClose: 7000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          
+          // Optional: Navigate to success page after toast
+          setTimeout(() => {
+            navigate('/');
+          }, 2000);
+        }, 5000);
       }
     } else {
       // Handle card payment
