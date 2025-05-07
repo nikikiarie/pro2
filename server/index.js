@@ -110,6 +110,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
@@ -143,20 +144,33 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'templates'));
 
 // Middleware
-app.use(cors({
-  origin: 'https://pro2-frontend.onrender.com',
-  methods: ['GET', 'POST'],
+// app.use(cors({
+//   origin: 'https://pro2-frontend.onrender.com',
+//   methods: ['GET', 'POST'],
   
+// }));
+app.use(cors({
+  origin: ['https://pro2-frontend.onrender.com', 'https://sandbox.safaricom.co.ke'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+app.use('/api/mpesa/callback', bodyParser.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware
+// app.use((req, res, next) => {
+//   console.log(`Incoming ${req.method} request to ${req.path}`);
+//   console.log('Headers:', req.headers);
+//   console.log('Body:', req.body);
+//   next();
+// });
 app.use((req, res, next) => {
   console.log(`Incoming ${req.method} request to ${req.path}`);
-  console.log('Headers:', req.headers);
-  console.log('Body:', req.body);
+  if (req.path === '/api/mpesa/callback') {
+    console.log('Raw body:', req.body.toString());
+  }
   next();
 });
 
@@ -171,36 +185,36 @@ app.use("/api/checkout", stripeRoutes);
 app.use("/api", mpesaRoutes);
 
 // Socket.io Events
-io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
+// io.on('connection', (socket) => {
+//   console.log('New client connected:', socket.id);
   
 
-  socket.on('join_room', (userId) => {
-    socket.join(`user_${userId}`);
-    console.log(`User ${userId} joined room`);
-  });
+//   socket.on('join_room', (userId) => {
+//     socket.join(`user_${userId}`);
+//     console.log(`User ${userId} joined room`);
+//   });
 
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-});
+//   socket.on('disconnect', () => {
+//     console.log('Client disconnected');
+//   });
+// });
 
 // Basic route
 app.get("/", (req, res) => {
   res.send("Server is working");
 });
 
-app.post("/test-payment-success", async (req, res) => {
-  const { userId, orderId } = req.body;
-  const io = req.app.get("socketio");
-  console.log("Test emitting to:", `user_${userId}`);
-  io.to(`user_${userId}`).emit("payment_success", {
-    orderId,
-    status: "paid",
-    mpesaReceipt: "TEST123",
-  });
-  res.json({ status: "success", message: "Test event emitted" });
-});
+// app.post("/test-payment-success", async (req, res) => {
+//   const { userId, orderId } = req.body;
+//   const io = req.app.get("socketio");
+//   console.log("Test emitting to:", `user_${userId}`);
+//   io.to(`user_${userId}`).emit("payment_success", {
+//     orderId,
+//     status: "paid",
+//     mpesaReceipt: "TEST123",
+//   });
+//   res.json({ status: "success", message: "Test event emitted" });
+// });
 
 // Database connection and server start
 const PORT = process.env.PORT || 4000;
