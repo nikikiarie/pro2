@@ -67,7 +67,7 @@ router.post('/callback', async (req, res) => {
 
         await order.save(); // Save changes to DB
 
-        
+        console.log("Order updated successfully:", order);
   } catch (err) {
     console.error("Error finding order:", err);
 }
