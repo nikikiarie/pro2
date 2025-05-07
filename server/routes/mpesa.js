@@ -28,17 +28,17 @@ router.post('/callback', async (req, res) => {
     const callbackData = req.body;
 
     
-  /* // 1. First show me EVERYTHING as-is
+   // 1. First show me EVERYTHING as-is
     console.log("COMPLETE CALLBACK DATA:\n", JSON.stringify(callbackData, null, 2));
     
-    // 2. Then show just the metadata structure
+   // 2. Then show just the metadata structure
     if (callbackData?.Body?.stkCallback?.CallbackMetadata) {
         const meta = callbackData.Body.stkCallback.CallbackMetadata;
         console.log("\nMETADATA STRUCTURE:\n", JSON.stringify(meta, null, 2));
     } else {
         console.log("\nNo metadata found");
     }
-*/
+
   
   const checkoutId = callbackData?.Body?.stkCallback?.CheckoutRequestID
   try {
