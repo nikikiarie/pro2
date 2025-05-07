@@ -9,7 +9,7 @@ const router = require('express').Router()
 router.post('/', async (req, res) => {
   try {
     const { userId, items, totalAmount } = req.body;
-    console.log("Orders route items",items)
+    console.log("Orders route items",userId)
     
     const order = await Order.create({
       userId,
